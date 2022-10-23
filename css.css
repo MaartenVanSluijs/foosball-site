@@ -1,0 +1,415 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+:root {
+  --intermate-yellow: #f8a90c;
+  --intermate-yellow-hover: #b87e08;
+  --intermate-red: #f56565;
+  --just-blue: #3f51b5;
+  --hover-blue: #1d34b1;
+  --soft-green: rgb(99, 224, 99);
+}
+
+body {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  font-family: 'Roboto', sans-serif;
+  background-color: var(--intermate-yellow);
+  margin: 0;
+}
+
+h1 {
+    color: white;
+    text-align: left;
+    font-size: 15px;
+  }
+
+  input[type=submit] {
+    background-color: white;
+    border: none;
+    color: var(--intermate-yellow);
+    padding: 16px 32px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+  }
+
+.button {
+    border: none;
+    text-align: left;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    margin: 4px 2px;
+    cursor: pointer;
+    width: 25%;
+    display: inline-block;
+  }
+  
+.button1 {
+    background-color: white; 
+    color: var(--intermate-yellow); 
+    border: 3px solid black;
+    transition-duration: 0.4s;
+    cursor: pointer;
+  }
+  
+.button1:hover {
+    background-color: var(--intermate-yellow);
+    color: white;
+  }
+
+
+input, button, textarea, select, a.button {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border: none;
+  border: 1px solid;
+  border-radius: 5px;
+  padding: 10px 10px;
+  width: 100%;
+  margin: 10px 10px;
+  color: inherit;
+  text-decoration: none;
+}
+
+select {
+  -webkit-appearance: auto;
+     -moz-appearance: auto;
+          appearance: auto;
+}
+
+button, input[type='submit'], a.button {
+  text-align: center;
+  background-color: var(--intermate-yellow);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  background-color: white;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+table tr.totalsRow, table th.totalsRow, table td.totalsRow {
+  background: #efefef;
+}
+
+table th, table td {
+  padding: 10px;
+}
+
+table th.iconCell, table td.iconCell {
+  text-align: center;
+}
+
+table th.iconCell i, table td.iconCell i {
+  font-size: 15px;
+  width: 15px;
+  padding: 8px;
+  border-radius: 50%;
+  background-color: var(--just-blue);
+  color: white;
+  cursor: pointer;
+}
+
+table th.iconCell i:hover, table td.iconCell i:hover {
+  background-color: var(--hover-blue);
+}
+
+table th {
+  background: var(--just-blue);
+  color: white;
+}
+
+main {
+  width: 100%;
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+div.fullScreenCenter {
+  width: 100%;
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+div.fullScreenCenter .icon {
+  font-size: 100px;
+  margin: 40px;
+  color: var(--intermate-yellow);
+}
+
+div.fullScreenCenter.greenscreen {
+  background-color: var(--soft-green);
+  color: white;
+}
+
+div.fullScreenCenter.greenscreen .icon {
+  color: white;
+}
+
+div.fullScreenCenter h1 {
+  font-weight: bold;
+  font-size: 50px;
+  margin: 0;
+}
+
+div.fullScreenCenter h2 {
+  font-weight: normal;
+  font-size: 30px;
+}
+
+div.fullScreenCenter input {
+  width: auto;
+}
+
+div.titlewrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin: 10px;
+}
+
+div.titlewrapper .icon {
+  font-size: 20px;
+  margin-left: 10px;
+  color: var(--intermate-yellow);
+}
+
+div.wrapper {
+  border: 1px solid grey;
+  border-radius: 20px;
+  background-color: white;
+  margin: 10px;
+  padding: 10px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+div.wrapper h2 {
+  margin: 0;
+}
+
+div.wrapper.products {
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  text-align: center;
+}
+
+div.wrapper.products > p {
+  width: 100%;
+}
+
+div.wrapper.products div.product {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  min-width: 100px;
+  max-height: 200px;
+  text-align: center;
+  cursor: pointer;
+  -webkit-transition-duration: .5s;
+          transition-duration: .5s;
+}
+
+div.wrapper.products div.product:hover {
+  -webkit-transform: scale(1.05);
+          transform: scale(1.05);
+}
+
+div.wrapper.products div.product div.imageWrapper {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  min-height: 100px;
+}
+
+div.wrapper.products div.product p {
+  margin: 0;
+}
+
+div.wrapper.products div.product p.productName {
+  font-weight: bold;
+}
+
+div.wrapper.products div.product img {
+  width: 100%;
+  max-height: 150px;
+}
+
+div.outerWrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+div.outerWrapper.substantialWidth {
+  width: 400px;
+  max-width: 40%;
+}
+
+div.outerWrapper.scroll {
+  overflow-y: auto;
+}
+
+div.wrapper.row, div.outerWrapper.row {
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+div.wrapper.column, div.outerWrapper.column {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+div.wrapper.expand, div.outerWrapper.expand {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+}
+
+div.wrapper.basketWrapper, div.outerWrapper.basketWrapper {
+  overflow: auto;
+}
+
+hr {
+  width: 70%;
+}
+
+div.buttonsWrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  margin: 10px 0;
+}
+
+div.buttonsWrapper button {
+  margin: 0;
+}
+
+div.buttonsWrapper button.logout, div.buttonsWrapper button.restButton {
+  background-color: var(--intermate-red);
+}
+
+@-webkit-keyframes rotation {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(359deg);
+            transform: rotate(359deg);
+  }
+}
+
+@keyframes rotation {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(359deg);
+            transform: rotate(359deg);
+  }
+}
+
+.spinner {
+  -webkit-animation: rotation 2s infinite linear;
+          animation: rotation 2s infinite linear;
+  font-size: 30px !important;
+}
+
+.topMargin {
+  margin: 10px 0;
+}
+
+div.errorWrapper {
+  display: none;
+}
+
+div.errors > div {
+  background-color: var(--intermate-red);
+  border: 1px solid red;
+  padding: 10px 20px;
+  margin: 10px 0;
+  color: white;
+  border: 20px 10px;
+  border-radius: 10px;
+}
+
+div.userInfo {
+  text-align: center;
+}
+
+div.userInfo p.userName {
+  font-weight: bold;
+  font-size: 30px;
+  margin: 10px;
+}
+
+.template {
+  display: none;
+}
+
+img.imagePlaceholder {
+  opacity: 0.3;
+}
+/*# sourceMappingURL=styles.css.map */
