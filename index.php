@@ -85,14 +85,134 @@
 
       <label for="kruipen">Is er gekropen: </label>
       <select name="kruipen" id="kruipen">
-        <option value="" selected>-=+=-</option>
         <option value="yes">Yes</option>
-        <option value="no">No</option>
+        <option value="no" selected>No</option>
       </select>
 
       <input type="submit" value="Submit" name="submit-single">
     </fieldset>
   </form>
+
+  <form method="post">
+    <fieldset>
+      <legend>Doubles game: </legend>
+      <label for="winner1">Winner 1:</label>
+      <select name="winner1" id="winner1">
+        <option value="" selected>-=+=-</option>
+        <?php
+          $query = $conn -> prepare("SELECT * FROM players");
+          $query -> execute();
+          $result = $query -> get_result();
+
+          while ($row = mysqli_fetch_array($result)) 
+          {
+            ?>
+            <option value="<?=$row['userName']?>"><?=$row['fullName']?></option>
+            <?php
+          }
+        ?>
+      </select>
+
+
+      <label for="winner2">Winner 2:</label>
+      <select name="winner2" id="winner2">
+        <option value="" selected>-=+=-</option>
+        <?php
+          $query = $conn -> prepare("SELECT * FROM players");
+          $query -> execute();
+          $result = $query -> get_result();
+
+          while ($row = mysqli_fetch_array($result)) 
+          {
+            ?>
+            <option value="<?=$row['userName']?>"><?=$row['fullName']?></option>
+            <?php
+          }
+        ?>
+      </select>
+
+
+      <label for="loser1">Loser1:</label>
+      <select name="loser1" id="loser1">
+        <option value="" selected>-=+=-</option>
+          <?php
+            $query = $conn -> prepare("SELECT * FROM players");
+            $query -> execute();
+            $result = $query -> get_result();
+
+            while ($row = mysqli_fetch_array($result)) 
+            {
+              ?>
+              <option value="<?=$row['userName']?>"><?=$row['fullName']?></option>
+              <?php
+            }
+          ?>
+      </select>
+
+
+      <label for="loser2">Loser2:</label>
+      <select name="loser2" id="loser2">
+        <option value="" selected>-=+=-</option>
+          <?php
+            $query = $conn -> prepare("SELECT * FROM players");
+            $query -> execute();
+            $result = $query -> get_result();
+
+            while ($row = mysqli_fetch_array($result)) 
+            {
+              ?>
+              <option value="<?=$row['userName']?>"><?=$row['fullName']?></option>
+              <?php
+            }
+          ?>
+      </select>
+
+
+      <label for="score1">Score winner:</label>
+      <select name="score1" id="score1">
+        <option name=10 disabled selected>10</option>
+      </select>
+
+
+      <label for="score2">Score loser:</label>
+      <select id="score2" name="score2">
+        <option value="" selected>-=+=-</option>
+          <?php
+            foreach ($loserScores as $value) 
+            {
+              ?>
+              <option value="<?=$value?>"><?=$value?></option>
+              <?php
+            }
+          ?>
+      </select>
+
+      <label for="kruipen">Is er gekropen: </label>
+      <select name="kruipen" id="kruipen">
+        <option value="yes">Yes</option>
+        <option value="no" selected>No</option>
+      </select>
+
+      <input type="submit" value="Submit" name="submit-double">
+    </fieldset>
+  </form>
+
+  <label for="singleLeaderboard">Singles Leaderboard:</label>
+  <select name="singlesLeaderboard" id="singlesLeaderboard">
+    <option value="placeholder">Click me to see the singles Leaderboard!</option>
+    <?php
+      $query = $conn -> prepare("SELECT * FROM players ORDER BY singleElo DESC");
+      $query -> execute();
+      $result = $query -> get_result();
+
+      while ($row = mysqli_fetch_array($result)) 
+      {
+        ?>
+        <option value="<?=$row['userName']?>" disabled><?=$row['fullName'] . " - " . $row["singleElo"] . " [won: " . $row["wins"] . " | losses: " . $row["losses"] . "]"?></option>
+        <?php
+      }
+    ?>
+  </select>
 </body>
 </html>
 
