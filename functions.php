@@ -26,7 +26,7 @@
     
     if (mysqli_num_rows($result) == 0) 
     {
-      $stmt = $conn -> prepare("INSERT INTO players(userName, fullName, elo, wins, losses, latenKruipen, gekropen) values(?, ?, 1000, 0, 0, 0, 0)");
+      $stmt = $conn -> prepare("INSERT INTO players(userName, fullName, singleElo, doubleElo, wins, losses, latenKruipen, gekropen) values(?, ?, 1000, 1000, 0, 0, 0, 0)");
       $stmt -> bind_param("ss", $userName, $fullName);
       $stmt -> execute();
       echo "Succesfully added user " . $fullName;
@@ -108,11 +108,11 @@
     {
       if ($row["userName"] == $winner)
       {
-        $winnerELO = $row["elo"];
+        $winnerELO = $row["singleElo"];
       }
       if ($row["userName"] == $loser)
       {
-        $loserELO = $row["elo"];
+        $loserELO = $row["singleElo"];
       }
     }
 
@@ -122,12 +122,12 @@
 
     //Update ELOs in DB
     //Update winner
-    $stmt = $conn -> prepare("UPDATE players SET elo = ? WHERE userName = ?");
+    $stmt = $conn -> prepare("UPDATE players SET singleElo = ? WHERE userName = ?");
     $stmt -> bind_param("is", $winnerNew, $winner);
     $stmt -> execute();
 
     //Update loser
-    $stmt = $conn -> prepare("UPDATE players SET elo = ? WHERE userName = ?");
+    $stmt = $conn -> prepare("UPDATE players SET singleElo = ? WHERE userName = ?");
     $stmt -> bind_param("is", $loserNew, $loser);
     $stmt -> execute();
   }
