@@ -1,5 +1,6 @@
 <?php
   include "connect.php";
+  $loserScores = array(0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9);
 ?>
 
 <html>
@@ -19,7 +20,7 @@
       <label for="username"><h1>Please enter a user name to register:</h1></label>
       <input type="text" size="20" id="username" name="username">
       <label for="fullname"><h1>Please enter your full name here:</h1></label>
-      <input type="text" size="20" id="fullname" name="fullname">
+      <input type="text" size="20" id="fullname" name="fullname"><br>
       <input type="submit" value="Register" name="register">
     </fieldset>
   </form>
@@ -30,7 +31,7 @@
       <legend>Singles game: </legend>
       <label for="winner">Winner:</label>
       <select name="winner" id="winner">
-        <option value="-1">-=+=-</option>
+        <option value="" selected>-=+=-</option>
         <?php
           $query = $conn -> prepare("SELECT * FROM players");
           $query -> execute();
@@ -49,7 +50,7 @@
       <label for="loser">Loser:</label>
       <select name="loser" id="loser">
 
-        <option value="">-=+=-</option>
+        <option value="" selected>-=+=-</option>
           <?php
             $query = $conn -> prepare("SELECT * FROM players");
             $query -> execute();
@@ -62,14 +63,33 @@
               <?php
             }
           ?>
-
       </select>
+
       <label for="score1">Score winner:</label>
-      <input type="text" id="score1" size="4">
+      <select name="score1" id="score1">
+        <option name=10 disabled selected>10</option>
+      </select>
+
       <label for="score2">Score loser:</label>
-      <input type="text" id="score2" size="4">
+      <select id="score2" name="score2">
+        <option value="" selected>-=+=-</option>
+          <?php
+            foreach ($loserScores as $value) 
+            {
+              ?>
+              <option value="<?=$value?>"><?=$value?></option>
+              <?php
+            }
+          ?>
+      </select>
+
       <label for="kruipen">Is er gekropen: </label>
-      <input type="checkbox" id="kruipen" name="kruipen">
+      <select name="kruipen" id="kruipen">
+        <option value="" selected>-=+=-</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+
       <input type="submit" value="Submit" name="submit-single">
     </fieldset>
   </form>
