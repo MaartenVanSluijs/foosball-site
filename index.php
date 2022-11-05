@@ -25,12 +25,12 @@
     </fieldset>
   </form>
 
-
+  <!-- Form for submitting a single game -->
   <form method="post">
     <fieldset>
       <legend>Singles game: </legend>
       <label for="winner">Winner:</label>
-      <select name="winner" id="winner">
+      <select name="winner1" id="winner">
         <option value="" selected>-=+=-</option>
         <?php
           $query = $conn -> prepare("SELECT * FROM players");
@@ -48,7 +48,7 @@
 
       </select>
       <label for="loser">Loser:</label>
-      <select name="loser" id="loser">
+      <select name="loser1" id="loser">
 
         <option value="" selected>-=+=-</option>
           <?php
@@ -93,6 +93,7 @@
     </fieldset>
   </form>
 
+  <!-- Form for submitting a doubles game -->
   <form method="post">
     <fieldset>
       <legend>Doubles game: </legend>
@@ -197,6 +198,7 @@
     </fieldset>
   </form>
 
+  <!-- Drop-down menu for the singles leaderboard -->
   <label for="singleLeaderboard">Singles Leaderboard:</label>
   <select name="singlesLeaderboard" id="singlesLeaderboard">
     <option value="placeholder">Click me to see the singles Leaderboard!</option>
@@ -208,7 +210,7 @@
       while ($row = mysqli_fetch_array($result)) 
       {
         ?>
-        <option value="<?=$row['userName']?>" disabled><?=$row['fullName'] . " - " . $row["singleElo"] . " [won: " . $row["wins"] . " | losses: " . $row["losses"] . "]"?></option>
+        <option value="<?=$row['userName']?>" disabled><?=$row['fullName'] . " - " . $row["singleElo"] . " [won: " . $row["wins"] . " | losses: " . $row["losses"] . " | total: " . $row["wins"] + $row["losses"] . "]"?></option>
         <?php
       }
     ?>

@@ -38,37 +38,15 @@
 
   if (isset($_POST["submit-single"]))
   {
-    $winner = $_POST["winner"];
-    $loser = $_POST["loser"];
+    $winner = $_POST["winner1"];
+    $loser = $_POST["loser1"];
     $score1 = 10;
     $score2 = ($_POST["score2"]);
     $kruipen = $_POST["kruipen"];
 
-    if ($winner == "")
-    {
-      echo "Please enter a winner";
-      exit();
-    }
-    if ($loser == "")
-    {
-      echo "Please enter a loser";
-      exit();
-    }
-    if ($winner == $loser) 
-    {
-      echo "You played against yourself? Impressive! Please choose two different players";
-      exit();
-    }
-    if ($score2 == "")
-    {
-      echo "Please enter a loser score";
-      exit();
-    }
-    if ($kruipen == "")
-    {
-      echo "Please enter if someone has gekropen";
-      exit();
-    }
+    validateGame();
+    echo "form complete!";
+    exit();
     
     // Add the game to the record
     $stmt = $conn -> prepare("INSERT INTO single_games(winner, loser, winnerScore, loserScore, kruipen) VALUES(?, ?, ?, ?, ?)");
@@ -130,6 +108,67 @@
     $stmt = $conn -> prepare("UPDATE players SET singleElo = ? WHERE userName = ?");
     $stmt -> bind_param("is", $loserNew, $loser);
     $stmt -> execute();
+  }
+
+
+  if (isset($_POST["submit-double"]))
+  {
+    validateGame();
+  }
+
+  // Checks if the entries of the form are all in order before processing
+  function validateGame()
+  {
+    $winner = $_POST["winner1"];
+    $loser = $_POST["loser1"];
+    $score2 = $_POST["score2"];
+    $players = array();
+
+    if ($winner == "")
+    {
+      echo "Please enter a winner";
+      exit();
+    }
+    if ($loser == "")
+    {
+      echo "Please enter a loser";
+      exit();
+    }
+
+    $players[] = $winner;
+    $players[] = $loser;
+
+    if ($score2 == "")
+    {
+      echo "Please enter a loser score";
+      exit();
+    }
+
+    if (isset($_POST["submit-double"]))
+    {
+      $winner2 = $_POST["winner2"];
+      $loser2 = $_POST["loser2"];
+
+      if ($winner2 == "")
+      {
+        echo "Please enter a second winner";
+        exit();
+      }
+      if ($loser2 == "")
+      {
+        echo "Please enter a second loser";
+        exit();
+      }
+
+      $players[] = $winner2;
+      $players[] = $loser2;
+    }
+
+    if (count($players) != count(array_unique($players)))
+    {
+      echo "A person can only appear in a game once, please try again";
+      exit();
+    }
   }
 
   function getExpectation($self, $other, $scaling)
