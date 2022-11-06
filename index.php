@@ -14,6 +14,7 @@
 
 <body>
 
+  <!-- Form for registering a user -->
   <form method="post">
     <fieldset>
       <legend>Register:</legend>
@@ -203,7 +204,21 @@
   <select name="singlesLeaderboard" id="singlesLeaderboard">
     <option value="placeholder">Click me to see the singles Leaderboard!</option>
     <?php
-      $query = $conn -> prepare("SELECT * FROM players ORDER BY singleElo DESC");
+      $query = $conn -> prepare(" SELECT players.userName, players.fullName, players.singleElo, COALESCE(winCount, 0) AS wins, COALESCE(lossCount, 0) AS losses 
+                                  FROM players
+                                  LEFT JOIN (
+                                      SELECT single_games.winner, COUNT(*) as winCount
+                                      FROM single_games
+                                      GROUP BY single_games.winner
+                                    ) AS wins
+                                  ON players.userName = wins.winner
+                                  LEFT JOIN (
+                                      SELECT single_games.loser, COUNT(*) as lossCount
+                                      FROM single_games
+                                      GROUP BY single_games.loser
+                                    ) AS losses
+                                  ON players.userName = losses.loser
+                                  ORDER BY players.singleElo DESC");
       $query -> execute();
       $result = $query -> get_result();
 

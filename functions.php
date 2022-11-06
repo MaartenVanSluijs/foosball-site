@@ -45,34 +45,13 @@
     $kruipen = $_POST["kruipen"];
 
     validateGame();
-    echo "form complete!";
-    exit();
     
     // Add the game to the record
     $stmt = $conn -> prepare("INSERT INTO single_games(winner, loser, winnerScore, loserScore, kruipen) VALUES(?, ?, ?, ?, ?)");
     $stmt -> bind_param("ssiis", $winner, $loser, $score1, $score2, $kruipen);
     $stmt -> execute();
 
-    // Add the wins/losses to the users
-    $stmt = $conn -> prepare("UPDATE players SET wins = wins + 1 WHERE userName = ?");
-    $stmt -> bind_param("s", $winner);
-    $stmt -> execute();
-
-    $stmt = $conn -> prepare("UPDATE players set losses = losses + 1 WHERE username = ?");
-    $stmt -> bind_param("s", $loser);
-    $stmt -> execute();
-
-    // Increments kruipen stats if there is gekropen
-    if ($kruipen == "yes")
-    {
-      $stmt = $conn -> prepare("UPDATE players SET gekropen = gekropen + 1 WHERE userName = ?");
-      $stmt -> bind_param("s", $loser);
-      $stmt -> execute();
-
-      $stmt = $conn -> prepare("UPDATE players SET latenKruipen = latenKruipen + 1 WHERE userName = ?");
-      $stmt -> bind_param("s", $winner);
-      $stmt -> execute();
-    }
+    echo "Successfully submitted game!";
 
     //Updates ELOs
     //Retrieves rows of players
@@ -171,6 +150,7 @@
     }
   }
 
+  // Returns the expected outcome of a game
   function getExpectation($self, $other, $scaling)
   {
     return 1 / (1 + (10 ** ( ($other - $self) / $scaling)) );
