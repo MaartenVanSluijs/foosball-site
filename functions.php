@@ -41,7 +41,7 @@
     $winner = $_POST["winner1"];
     $loser = $_POST["loser1"];
     $score1 = 10;
-    $score2 = ($_POST["score2"]);
+    $score2 = $_POST["score2"];
     $kruipen = $_POST["kruipen"];
 
     validateGame();
@@ -63,13 +63,14 @@
     //Assign old winner and loser ELO
     while ($row = mysqli_fetch_array($result)) 
     {
-      if ($row["userName"] == $winner)
+      switch($row["userName"])
       {
-        $winnerELO = $row["singleElo"];
-      }
-      if ($row["userName"] == $loser)
-      {
-        $loserELO = $row["singleElo"];
+        case $winner:
+          $winnerELO = $row["singleElo"];
+          break;
+        case $loser:
+          $loserELO = $row["singleElo"];
+          break;
       }
     }
 
@@ -78,21 +79,79 @@
     $loserNew = $loserELO + intval(64 * (0 - getExpectation($loserELO, $winnerELO, 400)));
 
     //Update ELOs in DB
-    //Update winner
-    $stmt = $conn -> prepare("UPDATE players SET singleElo = ? WHERE userName = ?");
-    $stmt -> bind_param("is", $winnerNew, $winner);
-    $stmt -> execute();
-
-    //Update loser
-    $stmt = $conn -> prepare("UPDATE players SET singleElo = ? WHERE userName = ?");
-    $stmt -> bind_param("is", $loserNew, $loser);
+    $stmt = $conn -> prepare("UPDATE players SET singleElo = CASE WHEN userName = ? THEN ? WHEN userName = ? THEN ? ELSE singleElo END");
+    $stmt -> bind_param("sisi", $winner, $winnerNew, $loser, $loserNew);
     $stmt -> execute();
   }
 
 
   if (isset($_POST["submit-double"]))
   {
+    $winner1 = $_POST["winner1"];
+    $winner2 = $_POST["winner2"];
+    $loser1 = $_POST["loser1"];
+    $loser2 = $_POST["loser2"];
+    $score1 = 10;
+    $score2 = $_POST["score2"];
+    $kruipen = $_POST["kruipen"];
+    
     validateGame();
+
+    // Add the game to the record
+    $stmt = $conn -> prepare("INSERT INTO double_games(winner1, winner2, loser1, loser2, winnerScore, loserScore, kruipen) VALUES(?, ?, ?, ?, ?, ?, ?)");
+    $stmt -> bind_param("ssssiis", $winner1, $winner2, $loser1, $loser2, $score1, $score2, $kruipen);
+    $stmt -> execute();
+
+    echo "Successfully submitted game!";
+
+    // Retrieve current ELOs from players table
+    $stmt = $conn -> prepare("SELECT * FROM players WHERE players.userName = ? OR players.userName = ? OR players.userName = ? OR players.userName = ?");
+    $stmt -> bind_param("ssss", $winner1, $winner2, $loser1, $loser2);
+    $stmt -> execute();
+    $result = $stmt -> get_result();
+
+    //Assign current winners and losers ELOs
+    while ($row = mysqli_fetch_array($result)) 
+    {
+      switch($row["userName"])
+      {
+        case $winner1:
+          $winner1ELO = $row["doubleElo"];
+          break;
+        case $winner2:
+          $winner2ELO = $row["doubleElo"];
+          break;
+        case $loser1:
+          $loser1ELO = $row["doubleElo"];
+          break;
+        case $loser2:
+          $loser2ELO = $row["doubleElo"];
+          break;
+      }
+    }
+
+    // Compute average ELO scores per team
+    $winnersELO = ($winner1ELO + $winner2ELO) / 2;
+    $losersELO = ($loser1ELO + $loser2ELO) / 2;
+
+    // Compute new ELO scores per person
+    $winner1New = $winner1ELO + intval(64 * (1 - getExpectation($winnersELO, $losersELO, 400)));
+    $winner2New = $winner2ELO + intval(64 * (1 - getExpectation($winnersELO, $losersELO, 400)));
+    $loser1New = $loser1ELO + intval(64 * (0 - getExpectation($losersELO, $winnersELO, 400)));
+    $loser2New = $loser2ELO + intval(64 * (0 - getExpectation($losersELO, $winnersELO, 400)));
+
+    // TODO: UPDATE THE ELOS IN THE DB!
+    $stmt = $conn -> prepare("UPDATE players SET doubleElo = CASE 
+                              WHEN userName = ? THEN ? 
+                              WHEN userName = ? THEN ? 
+                              WHEN userName = ? THEN ? 
+                              WHEN userName = ? THEN ? 
+                              ELSE doubleElo END");
+    $stmt -> bind_param("sisisisi", $winner1, $winner1New, 
+                                    $winner2, $winner2New,
+                                    $loser1, $loser1New,
+                                    $loser2, $loser2New);
+    $stmt -> execute();
   }
 
   // Checks if the entries of the form are all in order before processing
