@@ -232,8 +232,8 @@
   </select>
 
   <!-- Drop-down menu for the doubles leaderboard -->
-  <label for="singleLeaderboard">Doubles Leaderboard:</label>
-  <select name="singlesLeaderboard" id="singlesLeaderboard">
+  <label for="doublesLeaderboard">Doubles Leaderboard:</label>
+  <select name="doublesLeaderboard" id="doublesLeaderboard">
     <option value="placeholder">Click me to see the doubles Leaderboard!</option>
     <?php
       $query = $conn -> prepare(" SELECT players.userName, players.fullName, players.doubleElo, 
@@ -281,5 +281,5 @@
 
 
 <?php
-  include "functions.php";
+  include "inputHandler.php";
 ?>
