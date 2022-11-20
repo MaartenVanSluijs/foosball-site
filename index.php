@@ -204,7 +204,8 @@
   <select name="singlesLeaderboard" id="singlesLeaderboard">
     <option value="placeholder">Click me to see the singles Leaderboard!</option>
     <?php
-      $query = $conn -> prepare(" SELECT players.userName, players.fullName, players.singleElo, COALESCE(winCount, 0) AS wins, COALESCE(lossCount, 0) AS losses 
+      $query = $conn -> prepare(" SELECT  players.userName, players.fullName, players.singleElo, 
+                                          COALESCE(winCount, 0) AS wins, COALESCE(lossCount, 0) AS losses 
                                   FROM players
                                   LEFT JOIN (
                                       SELECT single_games.winner, COUNT(*) as winCount
@@ -218,6 +219,7 @@
                                       GROUP BY single_games.loser
                                     ) AS losses
                                   ON players.userName = losses.loser
+                                  WHERE COALESCE(winCount, 0) + COALESCE(lossCount, 0) != 0
                                   ORDER BY players.singleElo DESC");
       $query -> execute();
       $result = $query -> get_result();
@@ -264,6 +266,7 @@
                                       GROUP BY double_games.loser2
                                     ) AS losses2
                                   ON players.userName = losses2.loser2
+                                  WHERE COALESCE(winCount1, 0) + COALESCE(winCount2, 0) + COALESCE(lossCount1, 0) + COALESCE(lossCount2, 0) != 0
                                   ORDER BY players.doubleElo DESC");
       $query -> execute();
       $result = $query -> get_result();
