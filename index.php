@@ -199,86 +199,111 @@
     </fieldset>
   </form>
 
-  <!-- Drop-down menu for the singles leaderboard -->
-  <label for="singleLeaderboard">Singles Leaderboard:</label>
-  <select name="singlesLeaderboard" id="singlesLeaderboard">
-    <option value="placeholder">Click me to see the singles Leaderboard!</option>
-    <?php
-      $query = $conn -> prepare(" SELECT  players.userName, players.fullName, players.singleElo, 
-                                          COALESCE(winCount, 0) AS wins, COALESCE(lossCount, 0) AS losses 
-                                  FROM players
-                                  LEFT JOIN (
-                                      SELECT single_games.winner, COUNT(*) as winCount
-                                      FROM single_games
-                                      GROUP BY single_games.winner
-                                    ) AS wins
-                                  ON players.userName = wins.winner
-                                  LEFT JOIN (
-                                      SELECT single_games.loser, COUNT(*) as lossCount
-                                      FROM single_games
-                                      GROUP BY single_games.loser
-                                    ) AS losses
-                                  ON players.userName = losses.loser
-                                  WHERE COALESCE(winCount, 0) + COALESCE(lossCount, 0) != 0
-                                  ORDER BY players.singleElo DESC");
-      $query -> execute();
-      $result = $query -> get_result();
+  <!-- Table for the singles leaderboard -->
+	<table style="float: left">
+		<caption>Single Elos:</caption>
+		<tr>
+			<th>Player</th>
+			<th>Singles Elo</th>
+			<th>Wins</th>
+			<th>Losses</th>
+			<th>Total games played</th>
+		</tr>
+		<?php
+			$query = $conn -> prepare(" SELECT  players.userName, players.fullName, players.singleElo, 
+																					COALESCE(winCount, 0) AS wins, COALESCE(lossCount, 0) AS losses 
+																	FROM players
+																	LEFT JOIN (
+																			SELECT single_games.winner, COUNT(*) as winCount
+																			FROM single_games
+																			GROUP BY single_games.winner
+																		) AS wins
+																	ON players.userName = wins.winner
+																	LEFT JOIN (
+																			SELECT single_games.loser, COUNT(*) as lossCount
+																			FROM single_games
+																			GROUP BY single_games.loser
+																		) AS losses
+																	ON players.userName = losses.loser
+																	WHERE COALESCE(winCount, 0) + COALESCE(lossCount, 0) >= 10
+																	ORDER BY players.singleElo DESC");
+			$query -> execute();
+			$result = $query -> get_result();
+			
+			while ($row = mysqli_fetch_array($result))
+			{
+				?>
+				<tr>
+					<td><?=$row['fullName']?></td>
+					<td><?=$row['singleElo']?></td>
+					<td><?=$row['wins']?></td>
+					<td><?=$row['losses']?></td>
+					<td><?=$row['wins'] + $row['losses']?></td>
+				</tr>
+				<?php
+			}
+			?>
+	</table>
 
-      while ($row = mysqli_fetch_array($result)) 
-      {
-        ?>
-        <option value="<?=$row['userName']?>" disabled><?=$row['fullName'] . " - " . $row["singleElo"] . " [won: " . $row["wins"] . " | losses: " . $row["losses"] . " | total: " . $row["wins"] + $row["losses"] . "]"?></option>
-        <?php
-      }
-    ?>
-  </select>
+	<!-- Table for the doubles leaderboard -->
+	<table style="float: left">
+		<caption>Double Elos:</caption>
+		<tr>
+			<th>Player</th>
+			<th>Doubles Elo</th>
+			<th>Wins</th>
+			<th>Losses</th>
+			<th>Total games played</th>
+		</tr>
+		<?php
+			$query = $conn -> prepare(" SELECT players.userName, players.fullName, players.doubleElo, 
+																	COALESCE(winCount1, 0) + COALESCE(winCount2, 0) AS wins, 
+																	COALESCE(lossCount1, 0) + COALESCE(lossCount2, 0) AS losses 
+																	FROM players
+																	LEFT JOIN (
+																			SELECT double_games.winner1, COUNT(*) as winCount1
+																			FROM double_games
+																			GROUP BY double_games.winner1
+																		) AS wins1
+																	ON players.userName = wins1.winner1
+																	LEFT JOIN (
+																			SELECT double_games.winner2, COUNT(*) as winCount2
+																			FROM double_games
+																			GROUP BY double_games.winner2
+																		) AS wins2
+																	ON players.userName = wins2.winner2
+																	LEFT JOIN (
+																			SELECT double_games.loser1, COUNT(*) as lossCount1
+																			FROM double_games
+																			GROUP BY double_games.loser1
+																		) AS losses1
+																	ON players.userName = losses1.loser1
+																	LEFT JOIN (
+																			SELECT double_games.loser2, COUNT(*) as lossCount2
+																			FROM double_games
+																			GROUP BY double_games.loser2
+																		) AS losses2
+																	ON players.userName = losses2.loser2
+																	WHERE COALESCE(winCount1, 0) + COALESCE(winCount2, 0) + COALESCE(lossCount1, 0) + COALESCE(lossCount2, 0) >= 10
+																	ORDER BY players.doubleElo DESC");
+			$query -> execute();
+			$result = $query -> get_result();
+			
+			while ($row = mysqli_fetch_array($result))
+			{
+				?>
+				<tr>
+					<td><?=$row['fullName']?></td>
+					<td><?=$row['doubleElo']?></td>
+					<td><?=$row['wins']?></td>
+					<td><?=$row['losses']?></td>
+					<td><?=$row['wins'] + $row['losses']?></td>
+				</tr>
+				<?php
+			}
+			?>
+	</table>
 
-  <!-- Drop-down menu for the doubles leaderboard -->
-  <label for="doublesLeaderboard">Doubles Leaderboard:</label>
-  <select name="doublesLeaderboard" id="doublesLeaderboard">
-    <option value="placeholder">Click me to see the doubles Leaderboard!</option>
-    <?php
-      $query = $conn -> prepare(" SELECT players.userName, players.fullName, players.doubleElo, 
-                                  COALESCE(winCount1, 0) + COALESCE(winCount2, 0) AS wins, 
-                                  COALESCE(lossCount1, 0) + COALESCE(lossCount2, 0) AS losses 
-                                  FROM players
-                                  LEFT JOIN (
-                                      SELECT double_games.winner1, COUNT(*) as winCount1
-                                      FROM double_games
-                                      GROUP BY double_games.winner1
-                                    ) AS wins1
-                                  ON players.userName = wins1.winner1
-                                  LEFT JOIN (
-                                      SELECT double_games.winner2, COUNT(*) as winCount2
-                                      FROM double_games
-                                      GROUP BY double_games.winner2
-                                    ) AS wins2
-                                  ON players.userName = wins2.winner2
-                                  LEFT JOIN (
-                                      SELECT double_games.loser1, COUNT(*) as lossCount1
-                                      FROM double_games
-                                      GROUP BY double_games.loser1
-                                    ) AS losses1
-                                  ON players.userName = losses1.loser1
-                                  LEFT JOIN (
-                                      SELECT double_games.loser2, COUNT(*) as lossCount2
-                                      FROM double_games
-                                      GROUP BY double_games.loser2
-                                    ) AS losses2
-                                  ON players.userName = losses2.loser2
-                                  WHERE COALESCE(winCount1, 0) + COALESCE(winCount2, 0) + COALESCE(lossCount1, 0) + COALESCE(lossCount2, 0) != 0
-                                  ORDER BY players.doubleElo DESC");
-      $query -> execute();
-      $result = $query -> get_result();
-
-      while ($row = mysqli_fetch_array($result)) 
-      {
-        ?>
-        <option value="<?=$row['userName']?>" disabled><?=$row['fullName'] . " - " . $row["doubleElo"] . " [won: " . $row["wins"] . " | losses: " . $row["losses"] . " | total: " . $row["wins"] + $row["losses"] . "]"?></option>
-        <?php
-      }
-    ?>
-  </select>
 </body>
 </html>
 
