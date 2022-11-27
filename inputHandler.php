@@ -6,8 +6,8 @@
   // Runs if the register form is submitted
   if (isset($_POST["register"]))
   {
-    $userName = $_POST["username"];
-    $fullName = $_POST["fullname"];
+    $userName = mysqli_escape_string($conn, $_POST["username"]);
+    $fullName = mysqli_escape_string($conn, $_POST["fullname"]);
 
     if (strlen($userName) == 0) 
     {
