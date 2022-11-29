@@ -1,0 +1,28 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+:root {
+  --intermate-yellow: #f8a90c;
+  --intermate-yellow-hover: #b87e08;
+  --intermate-red: #f56565;
+  --just-blue: #3f51b5;
+  --hover-blue: #1d34b1;
+  --soft-green: rgb(99, 224, 99);
+}
+
+
+th, td {
+  border-bottom: 1px solid;
+}
+
+table {
+  border: 1px solid;
+}
+
+thead, tbody { display: block; }
+
+tbody {
+    height: 400px;       /* Just for the demo          */
+    overflow-y: auto;    /* Trigger vertical scroll    */
+}
+
+tr:nth-child(odd) {background-color:darkgray;}
+tr:hover {background-color: #b87e08;}

@@ -4,13 +4,13 @@
 ?>
 
 <html>
-<!-- <head>
+<head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="css.css">
+  <link rel="stylesheet" href="css2.css">
   <title>Foosball standings</title>
 
-</head> -->
+</head>
 
 <body>
 
@@ -202,16 +202,29 @@
   <!-- Table for the singles leaderboard -->
 	<table style="float: left">
 		<caption>Single Elos:</caption>
-		<tr>
-			<th>Player</th>
-			<th>Singles Elo</th>
-			<th>Wins</th>
-			<th>Losses</th>
-			<th>Total games played</th>
+		<tr>   
+			<th> <a href="/foosball-site?orderSinglesBy=fullName&dir=<?php echo (!isset($_GET["dir"]) || $_GET["dir"] == "DESC") ? "ASC" : "DESC";?>"> Player </a> </th>
+			<th> <a href="/foosball-site?orderSinglesBy=singleElo&dir=<?php echo (!isset($_GET["dir"]) || $_GET["dir"] == "ASC") ? "DESC" : "ASC";?>"> Singles Elo </a> </th>
+			<th> <a href="/foosball-site?orderSinglesBy=wins&dir=<?php echo (!isset($_GET["dir"]) || $_GET["dir"] == "ASC") ? "DESC" : "ASC";?>"> Wins </a> </th>
+			<th> <a href="/foosball-site?orderSinglesBy=losses&dir=<?php echo (!isset($_GET["dir"]) || $_GET["dir"] == "ASC") ? "DESC" : "ASC";?>"> Losses </a> </th>
+			<th> <a href="/foosball-site?orderSinglesBy=total&dir=<?php echo (!isset($_GET["dir"]) || $_GET["dir"] == "ASC") ? "DESC" : "ASC";?>"> Total games played</a> </th>
 		</tr>
 		<?php
-			$query = $conn -> prepare(" SELECT  players.userName, players.fullName, players.singleElo, 
-																					COALESCE(winCount, 0) AS wins, COALESCE(lossCount, 0) AS losses 
+      $sortStringSingles = "ORDER BY singleElo DESC";
+
+      $sortOptions = ["fullName", "singleElo", "wins", "losses", "total"];
+      $sortDirections = ["ASC", "DESC"];
+      if (isset($_GET["orderSinglesBy"]) && isset($_GET["dir"])) 
+      {
+        if (in_array($_GET["orderSinglesBy"], $sortOptions) && in_array($_GET["dir"], $sortDirections))
+        {
+          $sortStringSingles = "ORDER BY" . " " .  $_GET["orderSinglesBy"] . " " . $_GET["dir"];
+        }
+      }
+
+  		$query = $conn -> prepare(" SELECT  players.userName, players.fullName, players.singleElo, 
+																					COALESCE(winCount, 0) AS wins, COALESCE(lossCount, 0) AS losses,
+                                          COALESCE(winCount, 0) + COALESCE(lossCount, 0) AS total 
 																	FROM players
 																	LEFT JOIN (
 																			SELECT single_games.winner, COUNT(*) as winCount
@@ -225,8 +238,8 @@
 																			GROUP BY single_games.loser
 																		) AS losses
 																	ON players.userName = losses.loser
-																	WHERE COALESCE(winCount, 0) + COALESCE(lossCount, 0) >= 10
-																	ORDER BY players.singleElo DESC");
+																	WHERE COALESCE(winCount, 0) + COALESCE(lossCount, 0) != 0
+																	$sortStringSingles");
 			$query -> execute();
 			$result = $query -> get_result();
 			
@@ -238,7 +251,7 @@
 					<td><?=$row['singleElo']?></td>
 					<td><?=$row['wins']?></td>
 					<td><?=$row['losses']?></td>
-					<td><?=$row['wins'] + $row['losses']?></td>
+					<td><?=$row["total"]?></td>
 				</tr>
 				<?php
 			}
@@ -249,16 +262,31 @@
 	<table style="float: left">
 		<caption>Double Elos:</caption>
 		<tr>
-			<th>Player</th>
-			<th>Doubles Elo</th>
-			<th>Wins</th>
-			<th>Losses</th>
-			<th>Total games played</th>
+    <th> <a href="/foosball-site?orderDoublesBy=fullName&dir=<?php echo (!isset($_GET["dir"]) || $_GET["dir"] == "DESC") ? "ASC" : "DESC";?>"> Player </a> </th>
+			<th> <a href="/foosball-site?orderDoublesBy=doubleElo&dir=<?php echo (!isset($_GET["dir"]) || $_GET["dir"] == "ASC") ? "DESC" : "ASC";?>"> Double Elo </a> </th>
+			<th> <a href="/foosball-site?orderDoublesBy=wins&dir=<?php echo (!isset($_GET["dir"]) || $_GET["dir"] == "ASC") ? "DESC" : "ASC";?>"> Wins </a> </th>
+			<th> <a href="/foosball-site?orderDoublesBy=losses&dir=<?php echo (!isset($_GET["dir"]) || $_GET["dir"] == "ASC") ? "DESC" : "ASC";?>"> Losses </a> </th>
+			<th> <a href="/foosball-site?orderDoublesBy=total&dir=<?php echo (!isset($_GET["dir"]) || $_GET["dir"] == "ASC") ? "DESC" : "ASC";?>"> Total games played</a> </th>
 		</tr>
 		<?php
+      $sortStringDoubles = "ORDER BY DoubleElo DESC";
+
+      $sortOptions = ["fullName", "doubleElo", "wins", "losses", "total"];
+      $sortDirections = ["ASC", "DESC"];
+      if (isset($_GET["orderDoublesBy"]) && isset($_GET["dir"])) 
+      {
+        if (in_array($_GET["orderDoublesBy"], $sortOptions) && in_array($_GET["dir"], $sortDirections))
+        {
+          $sortStringDoubles = "ORDER BY" . " " .  $_GET["orderDoublesBy"] . " " . $_GET["dir"];
+        }
+      }
+
+
+
 			$query = $conn -> prepare(" SELECT players.userName, players.fullName, players.doubleElo, 
 																	COALESCE(winCount1, 0) + COALESCE(winCount2, 0) AS wins, 
-																	COALESCE(lossCount1, 0) + COALESCE(lossCount2, 0) AS losses 
+																	COALESCE(lossCount1, 0) + COALESCE(lossCount2, 0) AS losses,
+                                  COALESCE(winCount1, 0) + COALESCE(winCount2, 0) + COALESCE(lossCount1, 0) + COALESCE(lossCount2, 0) AS total 
 																	FROM players
 																	LEFT JOIN (
 																			SELECT double_games.winner1, COUNT(*) as winCount1
@@ -284,8 +312,8 @@
 																			GROUP BY double_games.loser2
 																		) AS losses2
 																	ON players.userName = losses2.loser2
-																	WHERE COALESCE(winCount1, 0) + COALESCE(winCount2, 0) + COALESCE(lossCount1, 0) + COALESCE(lossCount2, 0) >= 10
-																	ORDER BY players.doubleElo DESC");
+																	WHERE COALESCE(winCount1, 0) + COALESCE(winCount2, 0) + COALESCE(lossCount1, 0) + COALESCE(lossCount2, 0) != 0
+																	$sortStringDoubles");
 			$query -> execute();
 			$result = $query -> get_result();
 			
