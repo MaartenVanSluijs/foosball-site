@@ -2,9 +2,17 @@
   include "connect.php";
   $loserScores = array(0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9);
 ?>
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<link rel="stylesheet" type="text/css" href="css.css">
+<title>Foosball rankings website</title>
+<link rel="shortcut icon" href="Intermate_roster.png">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <html>
-<head>
+<!-- <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="css2.css">
@@ -16,19 +24,16 @@
 
   <!-- Form for registering a user -->
   <form method="post">
-    <fieldset>
-      <legend>Register:</legend>
+      <h1>Register:</h1>
       <label for="username"><h1>Please enter a user name to register:</h1></label>
       <input type="text" size="20" id="username" name="username">
       <label for="fullname"><h1>Please enter your full name here:</h1></label>
       <input type="text" size="20" id="fullname" name="fullname"><br>
       <input type="submit" value="Register" name="register">
-    </fieldset>
   </form>
 
   <!-- Form for submitting a single game -->
   <form method="post">
-    <fieldset>
       <legend>Singles game: </legend>
       <label for="winner">Winner:</label>
       <select name="winner1" id="winner">
@@ -91,7 +96,6 @@
       </select>
 
       <input type="submit" value="Submit" name="submit-single">
-    </fieldset>
   </form>
 
   <!-- Form for submitting a doubles game -->
