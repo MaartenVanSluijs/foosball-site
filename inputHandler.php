@@ -41,6 +41,7 @@
   // Runs if a singles game is submitted
   if (isset($_POST["submit-single"]))
   {
+    header("location:index.php");
     $winner = $_POST["winner1"];
     $loser = $_POST["loser1"];
     $score1 = 10;
@@ -53,8 +54,6 @@
     $stmt = $conn -> prepare("INSERT INTO single_games(winner, loser, winnerScore, loserScore, kruipen) VALUES(?, ?, ?, ?, ?)");
     $stmt -> bind_param("ssids", $winner, $loser, $score1, $score2, $kruipen);
     $stmt -> execute();
-
-    echo "Successfully submitted game!";
 
     updateSinglesELO($winner, $loser);
   }
@@ -80,6 +79,8 @@
     echo "Successfully submitted game!";
 
     updateDoublesELO($winner1, $winner2, $loser1, $loser2);
+
+    header("location:index.php");
   }
 
   // Runs if singleELOs are to be recalculated

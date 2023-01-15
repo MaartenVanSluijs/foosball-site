@@ -16,9 +16,9 @@ body {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  -webkit-box-align: center;
+  /* -webkit-box-align: center;
       -ms-flex-align: center;
-          align-items: center;
+          align-items: center; */
   font-family: 'Roboto', sans-serif;
   background-image: url("Bollen_3.png");
   background-size: 35%, 35%;
@@ -45,7 +45,7 @@ input[type=submit] {
     box-shadow: 0px 10px 20px 5px #b87e08;
   }
 
-  input[type=submit]:hover {
+input[type=submit]:hover {
     background-color: white;
     color: rgb(255, 171, 16);
 }
@@ -57,6 +57,10 @@ input[type=text] {
 
 select {
     width: 60%;
+}
+
+option {
+  color: black;
 }
 
 legend {
@@ -125,8 +129,6 @@ button, input[type='submit'], a.button {
 }
 
 table {
-  width: 100%;
-  border-collapse: collapse;
   text-align: left;
   background-color: white;
   border-radius: 10px;
@@ -207,13 +209,14 @@ div.fullScreenCenter.greenscreen .icon {
 
 div.fullScreenCenter h1 {
   font-weight: bold;
-  font-size: 50px;
+  font-size: 800px;
   margin: 0;
+  color: white;
 }
 
 div.fullScreenCenter h2 {
   font-weight: normal;
-  font-size: 30px;
+  font-size: 50px;
 }
 
 div.fullScreenCenter input {
